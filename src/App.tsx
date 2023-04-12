@@ -6,17 +6,22 @@ import axios from 'axios'
 
 function App() {
 
-  const [code, setCode] = useState('')
+
   const [data, setData] = useState({})
 
+  const [code, setCode] = useState('')
+
   useEffect(() => {
-    axios.get('/auth/spotify')
-      .then(res => {
-        setCode(res.data.code)
-      }).catch(err => {
-        console.error(err)
-      })
-  }, [])
+    axios.post('/auth', {code})
+    .then(res => {
+      console.log(res)
+      setData({data: res.data, code: res.status})
+    })
+    .catch(err => {
+      console.error(err)
+    })
+
+  }, [code])
 
   useEffect(() => {
     if (code) {
@@ -30,24 +35,20 @@ function App() {
     }
   }, [code])
 
+  useEffect(() => {
+    console.log(data)
+  }, [data])
+
+  useEffect(() => {
+    console.log(code)
+  }, [code])
+
   return (
     <div className="App">
       <header className="App-header">
          MUZACK
       </header>
       <MusicHolder></MusicHolder>
-      {data && (
-        <div>
-          <p>Access Token: {data.accessToken}</p>
-          <p>Refresh Token: {data.refreshToken}</p>
-          <p>Expires In: {data.expiresIn}</p>
-          <p>User ID: {data.userId}</p>
-          <p>User Name: {data.name}</p>
-          <p>User Email: {data.email}</p>
-          <img src={data.image} alt="User" />
-          <p>User Product: {data.product}</p>
-        </div>
-      )}
     </div>
   );
 }
