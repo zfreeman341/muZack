@@ -8,7 +8,6 @@ const morgan = require('morgan')
 const passport = require('passport')
 const SpotifyStrategy = require('passport-spotify').Strategy
 const session = require('express-session')
-require('dotenv').config()
 const querystring = require('querystring')
 const cookieParser = require('cookie-parser')
 const request = require('request') // request library
@@ -54,7 +53,7 @@ app.get('/login', function(req, res) {
   res.redirect('https://accounts.spotify.com/authorize?' +
   querystring.stringify({
     response_type: 'code',
-    client_id: process.env.CLIENT_ID,
+    client_id: process.env.REACT_APP_CLIENT_ID,
     scope: scope,
     redirect_uri: REDIRECT_URI,
     state: state
@@ -83,7 +82,7 @@ app.get('/callback', function(req, res) {
         grant_type: 'authorization_code'
       },
       headers: {
-        'Authorization': 'Basic ' + (Buffer.from(process.env.CLIENT_ID + ':' + process.env.CLIENT_SECRET).toString('base64'))
+        'Authorization': 'Basic ' + (Buffer.from(process.env.REACT_APP_CLIENT_ID + ':' + process.env.REACT_APP_CLIENT_SECRET).toString('base64'))
       },
       json: true
     }
@@ -124,7 +123,7 @@ app.get('/refresh_token', function(req, res) {
   var refresh_token = req.query.refresh_token;
   var authOptions = {
     url: 'https://accounts.spotify.com/api/token',
-    headers: { 'Authorization': 'Basic ' + (Buffer.from(process.env.CLIENT_ID+ ':' + process.env.CLIENT_SECRET).toString('base64')) },
+    headers: { 'Authorization': 'Basic ' + (Buffer.from(process.env.REACT_APP_CLIENT_ID+ ':' + process.env.REACT_APP_CLIENT_SECRET).toString('base64')) },
     form: {
       grant_type: 'refresh_token',
       refresh_token: refresh_token
@@ -148,8 +147,8 @@ app.post('/auth', (req, res) => {
   const code = req.body.code;
 
   const spotifyApi = new SpotifyWebApi({
-    clientId: process.env.CLIENT_ID,
-    clientSecret: process.env.CLIENT_SECRET,
+    clientId: process.env.REACT_APP_CLIENT_ID,
+    clientSecret: process.env.REACT_APP_CLIENT_SECRET,
     redirectUri: REDIRECT_URI
   })
 
@@ -184,8 +183,8 @@ app.post('/auth', (req, res) => {
 app.post('/refresh', (req, res) => {
   const refreshToken = req.body.refreshToken
   const spotifyApi = new SpotifyWebApi({
-    clientId: process.env.CLIENT_ID,
-    clientSecret: process.env.CLIENT_SECRET,
+    clientId: process.env.REACT_APP_CLIENT_ID,
+    clientSecret: process.env.REACT_APP_CLIENT_SECRET,
     redirectUri: REDIRECT_URI,
     refreshToken
   })
@@ -217,7 +216,7 @@ app.get('/lyrics/:artist/:title', async (req,res) => {
 app.get('/tracks', async (req, res) => {
   try {
     const spotifyApi = new SpotifyWebApi({
-      cliendId: process.env.CLIENT_ID
+      cliendId: process.env.REACT_APP_CLIENT_ID
     })
     spotifyApi.setAccessToken(req.body.token)
 
@@ -232,7 +231,7 @@ app.post('/playlist', async (req, res) => {
   try {
     const {accessToken, userId} = req.body
     const spotifyApi = new SpotifyWebApi({
-      clientId: process.env.CLIENT_ID
+      clientId: process.env.REACT_APP_CLIENT_ID
     })
     spotifyApi.setAccessToken(accessToken)
 
@@ -246,7 +245,7 @@ app.post('/playlist', async (req, res) => {
 app.post('/profile-arists', async (req, res) => {
   try{
     const spotifyApi = new SpotifyWebApi({
-      clientId: process.env.CLIENT_ID
+      clientId: process.env.REACT_APP_CLIENT_ID
     })
     spotifyApi.setAccessToken(req.body.accessToken)
 

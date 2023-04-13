@@ -3,52 +3,22 @@ import logo from './logo.svg';
 import './App.css';
 import MusicHolder from './components/MusicHolder';
 import axios from 'axios'
+import Login from './components/Login'
+import Home from './components/Home'
 
 function App() {
 
+  const [authorizationCode, setAuthorizationCode] = useState("")
 
-  const [data, setData] = useState({})
+  const handleAuthorizationCode = (code: string) => {
+    setAuthorizationCode(code)
+  }
 
-  const [code, setCode] = useState('')
-
-  useEffect(() => {
-    axios.post('/auth', {code})
-    .then(res => {
-      console.log(res)
-      setData({data: res.data, code: res.status})
-    })
-    .catch(err => {
-      console.error(err)
-    })
-
-  }, [code])
-
-  useEffect(() => {
-    if (code) {
-      axios.post('/auth', {code})
-        .then(res => {
-          setData(res.data)
-        })
-        .catch(err => {
-          console.error(err)
-        })
-    }
-  }, [code])
-
-  useEffect(() => {
-    console.log(data)
-  }, [data])
-
-  useEffect(() => {
-    console.log(code)
-  }, [code])
 
   return (
-    <div className="App">
-      <header className="App-header">
-         MUZACK
-      </header>
-      <MusicHolder></MusicHolder>
+    <div>
+      {!authorizationCode && <Login handleAuthorizationCode={handleAuthorizationCode} />}
+      {authorizationCode && <Home authorizationCode={authorizationCode} />}
     </div>
   );
 }
