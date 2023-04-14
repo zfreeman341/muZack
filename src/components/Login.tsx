@@ -2,11 +2,12 @@ import React, { useEffect } from 'react'
 import {FaSpotify} from 'react-icons/fa'
 
 interface LoginProps {
-  handleAuthorizationCode: (code: string) => void
+  handleAuthorizationCode: (code: string) => void,
+  authorizationCode: (string)
 }
 
 const Login: React.FC<LoginProps> = ({handleAuthorizationCode}) => {
-  const redirectUri = process.env.REACT_APP_REDIRECT_URI || "http://localhost:3000/callback"
+  const redirectUri = process.env.REACT_APP_REDIRECT_URI || "http://localhost:4000/callback"
   const clientId = process.env.REACT_APP_CLIENT_ID
 
   const handleClick = () => {
@@ -14,9 +15,24 @@ const Login: React.FC<LoginProps> = ({handleAuthorizationCode}) => {
     const authEndpoint = "https://accounts.spotify.com/authorize"
     const url = `${authEndpoint}?client_id=${clientId}&response_type=code&redirect_uri=${redirectUri}&scope=${encodeURIComponent(scopes)}`;
     window.location.replace(url);
-
-
   }
+
+  //   const handleClick = () => {
+  //   console.log('click!')
+  //   axios.get('/login')
+  //     .then(response => {
+  //       console.log(response, '------RESPONSE-----')
+  //       if (response.status === 200) {
+  //         const { url } = response.data;
+  //         window.location.replace(url);
+  //       } else {
+  //         throw new Error('Network response was not okay')
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.error('Error during login: ', err)
+  //     })
+  // }
 
   useEffect(() => {
     const search = window.location.search;

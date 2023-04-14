@@ -11,6 +11,8 @@ const session = require('express-session')
 const querystring = require('querystring')
 const cookieParser = require('cookie-parser')
 const request = require('request') // request library
+require('dotenv').config()
+const { createProxyMiddleware } = require('http-proxy-middleware');
 
 /**
  * Generates a random string containing numbers and letters
@@ -32,8 +34,8 @@ const stateKey = 'spotify_auth_state'
 
 const app = express()
 
-let REDIRECT_URI = process.env.REACT_APP_REDIRECT_URI || 'http://localhost:3000'
-const PORT = process.env.PORT || 3000;
+let REDIRECT_URI = process.env.REACT_APP_REDIRECT_URI || 'http://localhost:4000'
+const PORT = process.env.PORT || 4000;
 
 app.use(express.static(path.resolve(__dirname, './build')))
 app.use(cors())
@@ -46,6 +48,10 @@ app.use((morgan('combined')))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
 
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4000')
+})
+
 // -------- AUTHENTICATION ROUTE -----------
 app.get('/login', function(req, res) {
   let state = generateRandomString(16)
@@ -53,6 +59,7 @@ app.get('/login', function(req, res) {
 
   // application requests authorization
   let scope = 'user-read-private user-read-email';
+  res.set('Access-Control-Allow-Origin', '*') // Add this line to set the CORS header
   res.redirect('https://accounts.spotify.com/authorize?' +
   querystring.stringify({
     response_type: 'code',
@@ -146,9 +153,7 @@ app.get('/refresh_token', function(req, res) {
 // ----
 
 app.post('/auth', (req, res) => {
-  console.log(req.body, '-----REQ BODY----')
   const code = req.body.authorizationCode;
-  console.log(code, typeof(code), '----CODE----')
 
   const spotifyApi = new SpotifyWebApi({
     clientId: process.env.REACT_APP_CLIENT_ID,
@@ -156,16 +161,12 @@ app.post('/auth', (req, res) => {
     redirectUri: process.env.REACT_APP_REDIRECT_URI || REDIRECT_URI
   })
 
-  console.log(spotifyApi, '-----SPOTIFYAPI-----')
-
   const userJSON = {}
   spotifyApi.authorizationCodeGrant(code)
     .then(data => {
-      console.log(data, '-----data in authorizationCode Grant')
       userJSON['expiresIn'] = data.body['expires_in']
       userJSON['accessToken'] = data.body['access_token']
       userJSON['refreshToken'] = data.body['refresh_token']
-
       spotifyApi.setAccessToken(data.body['access_token'])
       return spotifyApi.getMe()
     })

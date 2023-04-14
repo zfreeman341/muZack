@@ -29,7 +29,7 @@ const useAuth = (authorizationCode: string) => {
   });
 
   useEffect(() => {
-    axios.post('http://localhost:3000/auth', {
+    axios.post('http://localhost:4000/auth', {
       authorizationCode: authorizationCode
     })
     .then(res => {
@@ -56,7 +56,7 @@ const useAuth = (authorizationCode: string) => {
     if (!refreshToken || !expiresIn) return
 
     const intervalCall = setInterval(() => {
-      axios.post('http://localhost:3000/refresh', {
+      axios.post('http://localhost:4000/refresh', {
         refreshToken
       })
       .then(res => {

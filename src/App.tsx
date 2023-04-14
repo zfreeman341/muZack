@@ -8,8 +8,7 @@ import Home from './components/Home'
 
 function App() {
 
-  const [authorizationCode, setAuthorizationCode] = useState<string>(
-    localStorage.getItem("authorizationCode") || ""
+  const [authorizationCode, setAuthorizationCode] = useState<string>(""
   )
 
   const [accessToken, setAccessToken] = useState<string>('')
@@ -22,6 +21,10 @@ function App() {
   useEffect(() => {
     console.log(authorizationCode)
   },[authorizationCode])
+
+  // useEffect(() => {
+  //   setAuthorizationCode(localStorage.getItem("authorizationCode"))
+  // }, [handleAuthorizationCode])
 
   useEffect(() => {
     const search = window.location.search;
@@ -49,7 +52,8 @@ function App() {
 
   return (
     <div className="h-screen bg-gray-900">
-      {authorizationCode.length === 0 && <Login handleAuthorizationCode={handleAuthorizationCode}/>}
+      {authorizationCode.length === 0 && <Login handleAuthorizationCode={handleAuthorizationCode}
+      authorizationCode={authorizationCode} />}
       {authorizationCode.length > 0 && <Home authorizationCode={authorizationCode} />}
     </div>
   );
