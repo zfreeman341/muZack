@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {FaSpotify} from 'react-icons/fa'
 
 interface LoginProps {
@@ -6,7 +6,7 @@ interface LoginProps {
 }
 
 const Login: React.FC<LoginProps> = ({handleAuthorizationCode}) => {
-  const redirectUri = "http://localhost:3000/callback"
+  const redirectUri = process.env.REACT_APP_REDIRECT_URI || "http://localhost:3000/callback"
   const clientId = process.env.REACT_APP_CLIENT_ID
 
   const handleClick = () => {
@@ -14,7 +14,17 @@ const Login: React.FC<LoginProps> = ({handleAuthorizationCode}) => {
     const authEndpoint = "https://accounts.spotify.com/authorize"
     const url = `${authEndpoint}?client_id=${clientId}&response_type=code&redirect_uri=${redirectUri}&scope=${encodeURIComponent(scopes)}`;
     window.location.replace(url);
+
+
   }
+
+  useEffect(() => {
+    const search = window.location.search;
+    const params = new URLSearchParams(search)
+    const code = params.get('code')
+    handleAuthorizationCode(code || "")
+  }, [handleAuthorizationCode])
+
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-900 text-white">

@@ -43,6 +43,9 @@ app.use(cookieParser())
 app.use((morgan('combined')))
 // app.use(corsProxy);
 
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({extended: true}))
+
 // -------- AUTHENTICATION ROUTE -----------
 app.get('/login', function(req, res) {
   let state = generateRandomString(16)
@@ -118,7 +121,6 @@ app.get('/callback', function(req, res) {
 })
 
 app.get('/refresh_token', function(req, res) {
-
   // requesting access token from refresh token
   var refresh_token = req.query.refresh_token;
   var authOptions = {
@@ -144,16 +146,19 @@ app.get('/refresh_token', function(req, res) {
 // ----
 
 app.post('/auth', (req, res) => {
-  const code = req.body.code;
+  console.log(req.body, '-----REQ BODY----')
+  const code = req.body.authorizationCode;
+  console.log(code, typeof(code), '----CODE----')
 
   const spotifyApi = new SpotifyWebApi({
     clientId: process.env.REACT_APP_CLIENT_ID,
     clientSecret: process.env.REACT_APP_CLIENT_SECRET,
-    redirectUri: REDIRECT_URI
+    redirectUri: process.env.REACT_APP_REDIRECT_URI || REDIRECT_URI
   })
 
-  const userJSON = {}
+  console.log(spotifyApi, '-----SPOTIFYAPI-----')
 
+  const userJSON = {}
   spotifyApi.authorizationCodeGrant(code)
     .then(data => {
       console.log(data, '-----data in authorizationCode Grant')
@@ -176,6 +181,7 @@ app.post('/auth', (req, res) => {
       res.status(201).send(userJSON)
     })
     .catch(err => {
+      console.error(err)
       res.status(500).send(err)
     })
 })
@@ -185,7 +191,7 @@ app.post('/refresh', (req, res) => {
   const spotifyApi = new SpotifyWebApi({
     clientId: process.env.REACT_APP_CLIENT_ID,
     clientSecret: process.env.REACT_APP_CLIENT_SECRET,
-    redirectUri: REDIRECT_URI,
+    redirectUri: process.env.REACT_APP_REDIRECT_URI || REDIRECT_URI,
     refreshToken
   })
   spotifyApi.refreshAccessToken()
@@ -256,21 +262,21 @@ app.post('/profile-arists', async (req, res) => {
   }
 })
 
-app.get('/auth/spotify', passport.authenticate('spotify', {
-  scope: ['user-read-email', 'user-read-private'],
-  showDialog:true
-}), (req, res) => {
-  res.redirect(authUrl);
-});
+// app.get('/auth/spotify', passport.authenticate('spotify', {
+//   scope: ['user-read-email', 'user-read-private'],
+//   showDialog:true
+// }), (req, res) => {
+//   res.redirect(authUrl);
+// });
 
-app.get('/auth/spotify/callback', passport.authenticate('spotify', {failureRedirect: '/login'}),
-  function(req, res) {
-    const code = req.query.code;
-    // do something with the code
-    res.status(200).send({code: code})
-    // res.redirect('/'); // redirect to home page or some other page
-  }
-)
+// app.get('/auth/spotify/callback', passport.authenticate('spotify', {failureRedirect: '/login'}),
+//   function(req, res) {
+//     const code = req.query.code;
+//     // do something with the code
+//     res.status(200).send({code: code})
+//     // res.redirect('/'); // redirect to home page or some other page
+//   }
+// )
 
 
 
