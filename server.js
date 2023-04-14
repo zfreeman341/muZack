@@ -1,3 +1,8 @@
+// YOU GOT THIS BRO - KEEP GOING!
+// READ THE AUTH LOG AND WATCH MORE VIDS
+// LESS CHATGPT - USE FOR SMALLER PROBLEMS
+// GET THE ACCESS TOKEN - THAT'S WHAT YOU'RE MISSING
+
 const express = require('express')
 const bodyParser = require ('body-parser')
 const path = require('path')
@@ -42,15 +47,15 @@ app.use(cors())
 // app.use(bodyParser.json())
 // app.use(bodyParser.urlencoded({extended: true}))
 app.use(cookieParser())
-app.use((morgan('combined')))
 // app.use(corsProxy);
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
 
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4000')
-})
+// app.use((req, res, next) => {
+//   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4000')
+// })
+app.use((morgan('tiny')))
 
 // -------- AUTHENTICATION ROUTE -----------
 app.get('/login', function(req, res) {
@@ -58,7 +63,7 @@ app.get('/login', function(req, res) {
   res.cookie(stateKey, state)
 
   // application requests authorization
-  let scope = 'user-read-private user-read-email';
+  const scope = 'user-read-private user-read-email';
   res.set('Access-Control-Allow-Origin', '*') // Add this line to set the CORS header
   res.redirect('https://accounts.spotify.com/authorize?' +
   querystring.stringify({
@@ -74,15 +79,16 @@ app.get('/login', function(req, res) {
 app.get('/callback', function(req, res) {
   // application requests refresh and access tokens after checking the state paramter
   const code = req.query.code || null;
-  const state = req.query.state || null;
-  const storedState = req.cookies ? req.cookies[stateKey] : null
+  // const state = req.query.state || null;
+  // const storedState = req.cookies ? req.cookies[stateKey] : null
 
-  if (state === null || state !== storedState) {
-    res.redirect('/#' +
-    querystring.stringify({
-      error: 'state_mismatch'
-    }))
-  } else {
+  // if (state === null || state !== storedState) {
+  //   res.redirect('/#' +
+  //   querystring.stringify({
+  //     error: 'state_mismatch'
+  //   }))
+  // } else
+  // {
     res.clearCookie(stateKey);
     const authOptions = {
       url: 'https://accounts.spotify.com/api/token',
@@ -105,7 +111,6 @@ app.get('/callback', function(req, res) {
         headers: {'Authorization': 'Bearer ' + access_token},
         json: true
        }
-
        // use access token to access Spotify web API
        request.get(options, (error, response, body) => {
         console.log(body)
@@ -125,7 +130,7 @@ app.get('/callback', function(req, res) {
       }
     })
   }
-})
+)
 
 app.get('/refresh_token', function(req, res) {
   // requesting access token from refresh token
@@ -154,7 +159,6 @@ app.get('/refresh_token', function(req, res) {
 
 app.post('/auth', (req, res) => {
   const code = req.body.authorizationCode;
-
   const spotifyApi = new SpotifyWebApi({
     clientId: process.env.REACT_APP_CLIENT_ID,
     clientSecret: process.env.REACT_APP_CLIENT_SECRET,
@@ -278,9 +282,6 @@ app.post('/profile-arists', async (req, res) => {
 //     // res.redirect('/'); // redirect to home page or some other page
 //   }
 // )
-
-
-
 
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`)
