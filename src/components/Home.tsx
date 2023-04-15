@@ -50,12 +50,10 @@ const Home: React.FC<HomePageProps> = ({authorizationCode}) => {
   const useAuth = (authorizationCode: string) => {
 
     useEffect(() => {
-      console.log('in useAuth')
       axios.post('http://localhost:4000/auth', {
         authorizationCode: authorizationCode
       })
       .then(res => {
-        console.log(res, '--------RES---------')
         setAccessToken(res.data.accessToken);
         setRefreshToken(res.data.refreshToken);
         setExpiresIn(res.data.expiresIn);
@@ -98,10 +96,10 @@ const Home: React.FC<HomePageProps> = ({authorizationCode}) => {
   }
 
   const token = useAuth(authorizationCode)
-  useEffect(() => {
-    console.log(token)
-    console.log(authorizationCode)
-  }, [token, authorizationCode])
+  // useEffect(() => {
+  //   console.log(token)
+  //   console.log(authorizationCode)
+  // }, [token, authorizationCode])
 
   useEffect(() => {
     if (!query) return setQueryResults([])
@@ -137,14 +135,11 @@ const Home: React.FC<HomePageProps> = ({authorizationCode}) => {
   }
 
   return (
-    <div className="relative" style={{minHeight: "100vh"}}>
-      <div  className="border border-bottom border-dark-800">
+<div className="relative z-4" style={{background: `url(${logo}) no-repeat center center fixed`, backgroundSize: 'cover'}}>      <div  className="border border-bottom border-dark-800">
       <Banner/>
       </div>
-  <div className="bg-dark-500 text-dark-700 h-screen border z-0 py-16"
-  style={{backgroundImage: `url(${logo})`, backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: 'center', opacity: 1, minHeight: "100vh"}}
-  >
-    <div className="mb-4 mt-4">
+      <div className="text-dark-700 h-screen border z-0 py-16">
+    <div className="text-dark-700">
       <Search changeQueryState={changeQueryState} />
       {showMusicList &&
       <MusicList queryResults={queryResults} retrieveSongData={retrieveSongData}></MusicList>
@@ -154,13 +149,6 @@ const Home: React.FC<HomePageProps> = ({authorizationCode}) => {
           <Playlists userInfo={userInfo} accessToken={accessToken} url={url}></Playlists>
       }
     </div>
-    <div className="flex justify-center items-center h-screen">
-      <p className="text-dark-800 font-semibold text-xl">
-      </p>
-    </div>
-  </div>
-  <div>
-
   </div>
   </div>
   )

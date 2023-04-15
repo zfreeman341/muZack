@@ -31,9 +31,7 @@ const Playlists: React.FC<Props>=({userInfo, accessToken, url}) => {
     .catch(err => console.error(err))
   }, [userInfo, accessToken, url]);
 
-  React.useEffect(() => {
-    console.log(userPlaylists);
-  }, [userPlaylists]);
+
 
   return(
     <div className="container mx-auto px-4 py-6 z-4">

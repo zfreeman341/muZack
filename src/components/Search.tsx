@@ -36,7 +36,7 @@ const Search: React.FC<Props> = ({changeQueryState}) => {
           type="text"
           placeholder="Search for songs or artists"
           onChange={handleChange}
-          className="w-full py-2 pl-10 pr-4 text-dark-500 border border-gray-300 rounded-md outline-none bg-dark-800 focus:bg-red-800 focus:border-dark-400"
+          className="w-full py-2 pl-10 pr-4 text-dark-700 border border-gray-300 rounded-md outline-none bg-dark-800 focus:bg-red-800 focus:border-dark-400"
         />
       </div>
     </form>

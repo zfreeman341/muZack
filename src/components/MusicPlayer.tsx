@@ -3,8 +3,8 @@ import SpotifyPlayer from 'react-spotify-web-playback';
 
 
 interface Props{
-  token: string,
-  songUri: string[]
+  token: string;
+  songUri: string | string[]
 }
 
 const MusicPlayer: React.FC<Props> = ({token, songUri}) => {
@@ -15,7 +15,7 @@ const MusicPlayer: React.FC<Props> = ({token, songUri}) => {
   }, [songUri])
 
   return(
-    <div className="border border-red-500">
+    <div className="bg-dark-500 !important">
      {token && (
       <div className="fixed w-11/12 bottom-0">
         <SpotifyPlayer

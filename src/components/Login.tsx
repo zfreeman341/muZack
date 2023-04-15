@@ -11,28 +11,23 @@ const Login: React.FC<LoginProps> = ({handleAuthorizationCode}) => {
   const clientId = process.env.REACT_APP_CLIENT_ID
 
   const handleClick = () => {
-    const scopes = "user-read-private user-read-email"
+    const scopes = [
+      'streaming',
+      'user-read-recently-played',
+      'user-read-playback-state',
+      'user-top-read',
+      'user-modify-playback-state',
+      'user-follow-read',
+      'user-library-read',
+      'user-library-modify',
+      'user-read-email',
+      'user-read-private'
+    ];
     const authEndpoint = "https://accounts.spotify.com/authorize"
-    const url = `${authEndpoint}?client_id=${clientId}&response_type=code&redirect_uri=${redirectUri}&scope=${encodeURIComponent(scopes)}`;
+    const url = `${authEndpoint}?client_id=${clientId}&response_type=code&redirect_uri=${redirectUri}&scope=${encodeURIComponent(scopes.join(' '))}`;
     window.location.replace(url);
   }
 
-  //   const handleClick = () => {
-  //   console.log('click!')
-  //   axios.get('/login')
-  //     .then(response => {
-  //       console.log(response, '------RESPONSE-----')
-  //       if (response.status === 200) {
-  //         const { url } = response.data;
-  //         window.location.replace(url);
-  //       } else {
-  //         throw new Error('Network response was not okay')
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       console.error('Error during login: ', err)
-  //     })
-  // }
 
   useEffect(() => {
     const search = window.location.search;

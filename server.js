@@ -63,7 +63,7 @@ app.get('/login', function(req, res) {
   res.cookie(stateKey, state)
 
   // application requests authorization
-  const scope = 'user-read-private user-read-email';
+  const scope = ['user-read-private', 'user-read-email', 'streaming'];
   res.set('Access-Control-Allow-Origin', '*') // Add this line to set the CORS header
   res.redirect('https://accounts.spotify.com/authorize?' +
   querystring.stringify({
@@ -113,7 +113,7 @@ app.get('/callback', function(req, res) {
        }
        // use access token to access Spotify web API
        request.get(options, (error, response, body) => {
-        console.log(body)
+        console.log('in body')
        })
 
        // pass the token to the browser to mak erequests
@@ -232,7 +232,6 @@ app.get('/tracks', async (req, res) => {
     spotifyApi.setAccessToken(req.query.token)
     const getTracks = await spotifyApi.searchTracks(req.query.searchTerm)
     res.status(201).send(getTracks)
-    console.log(getTracks)
   } catch (err) {
     res.status(500).send(err)
     console.error(err)

@@ -9,9 +9,6 @@ function App() {
   const [authorizationCode, setAuthorizationCode] = useState<string>(""
   )
 
-
-  const [accessToken, setAccessToken] = useState<string>('')
-
   const handleAuthorizationCode = (code: string) => {
     setAuthorizationCode(code)
     localStorage.setItem("authorizationCode", code)
@@ -24,9 +21,6 @@ function App() {
     }
   }, [])
 
-  useEffect(() => {
-    console.log(authorizationCode)
-  },[authorizationCode])
 
   // // useEffect(() => {
   //   setAuthorizationCode(localStorage.getItem("authorizationCode"))
@@ -40,7 +34,8 @@ function App() {
   // }, [authorizationCode])
 
   return (
-    <div className="h-screen bg-gray-900" style={{backgroundImage: `url(${logo})`, backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: 'center', opacity: 1}}>
+    // <div className="w-full h-full z-0">
+    <div className="bg-dark-500 !important">
       {authorizationCode.length === 0 && <Login handleAuthorizationCode={handleAuthorizationCode}
       authorizationCode={authorizationCode} />}
       {authorizationCode.length > 0 && <Home authorizationCode={authorizationCode} />}
