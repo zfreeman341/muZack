@@ -1,14 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
+// import debounce from 'lodash.debounce';
 
-const Search: React.FC = () => {
+interface Props {
+  changeQueryState: Function
+}
+
+const Search: React.FC<Props> = ({changeQueryState}) => {
+
   const handleChange = (event: React.FormEvent<HTMLInputElement>) => {
-    console.log('SEARCHING BABY')
+    changeQueryState(event.currentTarget.value)
   }
-  const [query, setQuery] = useState('')
 
-  const handleSubmit = () => {
-    console.log('submitted')
-  }
+  // const delayedQuery = useCallback(
+  //   debounce((q) => changeQueryState(q), 300), []
+  // )
 
   return (
     <form className="max-w-md mx-auto">
@@ -30,7 +35,8 @@ const Search: React.FC = () => {
         <input
           type="text"
           placeholder="Search for songs or artists"
-          className="w-full py-2 pl-10 pr-4 text-gray-800 border border-gray-300 rounded-md outline-none bg-red-500 focus:bg-red-600 focus:border-orange-500"
+          onChange={handleChange}
+          className="w-full py-2 pl-10 pr-4 text-dark-500 border border-gray-300 rounded-md outline-none bg-dark-800 focus:bg-red-800 focus:border-dark-400"
         />
       </div>
     </form>

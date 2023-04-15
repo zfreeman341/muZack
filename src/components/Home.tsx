@@ -4,6 +4,8 @@ import logo from '../logo/logo.png'
 import Banner from './Banner'
 import Playlists from './Playlists'
 import Search from './Search'
+import MusicList from './MusicList'
+import MusicPlayer from './MusicPlayer'
 
 const url = 'http://localhost:4000'
 
@@ -33,6 +35,17 @@ const Home: React.FC<HomePageProps> = ({authorizationCode}) => {
     image: '',
     product: ''
   });
+    // set search result list
+  const [query, setQuery] = useState<string>('')
+  const [queryResults, setQueryResults] = useState<any>([])
+  const [songUri, setSongUri] = useState<string>('')
+  const [songArtist, setSongArtist] = useState<string>('')
+  const [songTitle, setSongTitle] = useState<string>('s')
+
+  // which components to be rendered
+  const [showPlaylists, setShowPlaylists] = useState<boolean>(true)
+  const [showMusicList, setShowMusicList] = useState<boolean>(true)
+
 
   const useAuth = (authorizationCode: string) => {
 
@@ -90,17 +103,56 @@ const Home: React.FC<HomePageProps> = ({authorizationCode}) => {
     console.log(authorizationCode)
   }, [token, authorizationCode])
 
+  useEffect(() => {
+    if (!query) return setQueryResults([])
+    if (!(token as any)) return
+
+    let cancel = false
+
+    axios.get(`${url}/tracks`, {
+      params: {
+        token: token,
+        searchTerm: query
+      }
+    })
+      .then(res => {
+        if (cancel) return
+        setQueryResults(res?.data?.body?.tracks?.items)
+      })
+      .catch(err => console.error(err))
+
+      return () => {
+        (cancel = true)
+      }
+  }, [query, token])
+
+  const changeQueryState = (searchValue: string) => {
+    setQuery(searchValue)
+  }
+
+  const retrieveSongData = (uri: string, artist: string, title: string) => {
+    setSongUri(uri);
+    setSongArtist(artist)
+    setSongTitle(title)
+  }
+
   return (
-    <div className="relative">
+    <div className="relative" style={{minHeight: "100vh"}}>
       <div  className="border border-bottom border-dark-800">
       <Banner/>
       </div>
   <div className="bg-dark-500 text-dark-700 h-screen border z-0 py-16"
-  style={{backgroundImage: `url(${logo})`, backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: 'center', opacity: 1}}
+  style={{backgroundImage: `url(${logo})`, backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: 'center', opacity: 1, minHeight: "100vh"}}
   >
-    <div>
-      <Search />
-    <Playlists userInfo={userInfo} accessToken={accessToken} url={url}></Playlists>
+    <div className="mb-4 mt-4">
+      <Search changeQueryState={changeQueryState} />
+      {showMusicList &&
+      <MusicList queryResults={queryResults} retrieveSongData={retrieveSongData}></MusicList>
+      }
+      <MusicPlayer songUri={songUri} token={token}></MusicPlayer>
+      {showPlaylists &&
+          <Playlists userInfo={userInfo} accessToken={accessToken} url={url}></Playlists>
+      }
     </div>
     <div className="flex justify-center items-center h-screen">
       <p className="text-dark-800 font-semibold text-xl">

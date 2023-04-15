@@ -229,12 +229,13 @@ app.get('/tracks', async (req, res) => {
     const spotifyApi = new SpotifyWebApi({
       cliendId: process.env.REACT_APP_CLIENT_ID
     })
-    spotifyApi.setAccessToken(req.body.token)
-
-    const getTracks = await spotifyApi.searchTracks(req.body.searchTerm)
+    spotifyApi.setAccessToken(req.query.token)
+    const getTracks = await spotifyApi.searchTracks(req.query.searchTerm)
     res.status(201).send(getTracks)
+    console.log(getTracks)
   } catch (err) {
     res.status(500).send(err)
+    console.error(err)
   }
 })
 

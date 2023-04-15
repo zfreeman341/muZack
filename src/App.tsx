@@ -1,8 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import logo from './logo.svg';
 import './App.css';
-import MusicHolder from './components/MusicHolder';
-import axios from 'axios'
+import logo from './logo/logo.png'
 import Login from './components/Login'
 import Home from './components/Home'
 
@@ -42,7 +40,7 @@ function App() {
   // }, [authorizationCode])
 
   return (
-    <div className="h-screen bg-gray-900">
+    <div className="h-screen bg-gray-900" style={{backgroundImage: `url(${logo})`, backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: 'center', opacity: 1}}>
       {authorizationCode.length === 0 && <Login handleAuthorizationCode={handleAuthorizationCode}
       authorizationCode={authorizationCode} />}
       {authorizationCode.length > 0 && <Home authorizationCode={authorizationCode} />}
