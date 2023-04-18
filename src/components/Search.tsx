@@ -1,8 +1,9 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 // import debounce from 'lodash.debounce';
 
 interface Props {
-  changeQueryState: Function
+  changeQueryState: Function;
+  setSongUri: Function
 }
 
 const Search: React.FC<Props> = ({changeQueryState}) => {

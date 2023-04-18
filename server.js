@@ -221,6 +221,7 @@ app.get('/lyrics/:artist/:title', async (req,res) => {
     res.send(lyrics)
   } catch (err) {
     res.status(500).send(err)
+    console.error(err)
   }
 })
 
@@ -267,21 +268,25 @@ app.post('/profile-arists', async (req, res) => {
   }
 })
 
-// app.get('/auth/spotify', passport.authenticate('spotify', {
-//   scope: ['user-read-email', 'user-read-private'],
-//   showDialog:true
-// }), (req, res) => {
-//   res.redirect(authUrl);
-// });
+app.post('/play-next-track', async (req, res) => {
+  try {
+    const spotifyApi = new SpotifyWebApi({
+      clientId: process.env.REACT_APP_CLIENT_ID
+    });
+    spotifyApi.setAccessToken(req.body.accessToken);
 
-// app.get('/auth/spotify/callback', passport.authenticate('spotify', {failureRedirect: '/login'}),
-//   function(req, res) {
-//     const code = req.query.code;
-//     // do something with the code
-//     res.status(200).send({code: code})
-//     // res.redirect('/'); // redirect to home page or some other page
-//   }
-// )
+    const playbackState = await spotifyApi.getMyCurrentPlaybackState();
+    // if (!playbackState || !playbackState.is_playing) {
+    //   return res.sendStatus(404);
+    // }
+
+    const nextTrack = await spotifyApi.skipToNext();
+    res.status(200).json({ success: true, nextTrack });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
+});
 
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`)

@@ -6,6 +6,7 @@ import Playlists from './Playlists'
 import Search from './Search'
 import MusicList from './MusicList'
 import MusicPlayer from './MusicPlayer'
+import Lyrics from './Lyrics'
 
 const url = 'http://localhost:4000'
 
@@ -35,17 +36,24 @@ const Home: React.FC<HomePageProps> = ({authorizationCode}) => {
     image: '',
     product: ''
   });
+
+  // interface QueryResult {
+  //   name: string;
+  //   arists: {name: string}
+  // }
     // set search result list
   const [query, setQuery] = useState<string>('')
   const [queryResults, setQueryResults] = useState<any>([])
-  const [songUri, setSongUri] = useState<string>('')
+  const [songUri, setSongUri] = useState<string[]>([])
   const [songArtist, setSongArtist] = useState<string>('')
-  const [songTitle, setSongTitle] = useState<string>('s')
+  const [songTitle, setSongTitle] = useState<string>('')
+  const [songIndex, setSongIndex] = useState<any>(0)
+  const [allSongUris, setAllSongUris] = useState<string[]>([])
 
   // which components to be rendered
   const [showPlaylists, setShowPlaylists] = useState<boolean>(true)
   const [showMusicList, setShowMusicList] = useState<boolean>(true)
-
+  const [showLyrics, setShowLyrics] = useState<boolean>(true)
 
   const useAuth = (authorizationCode: string) => {
 
@@ -128,26 +136,43 @@ const Home: React.FC<HomePageProps> = ({authorizationCode}) => {
     setQuery(searchValue)
   }
 
-  const retrieveSongData = (uri: string, artist: string, title: string) => {
+  const retrieveSongData = (uri: string[], artist: string, title: string, index: number) => {
     setSongUri(uri);
     setSongArtist(artist)
     setSongTitle(title)
+    setSongIndex(index)
   }
 
+  useEffect(() => {
+    console.log(queryResults)
+  }, [queryResults])
+
   return (
-<div className="relative z-4" style={{background: `url(${logo}) no-repeat center center fixed`, backgroundSize: 'cover'}}>      <div  className="border border-bottom border-dark-800">
+<div className="relative z-50 overflow-auto" style={{background: `url(${logo}) repeat center`, backgroundSize: 'cover'}}>      <div  className="border border-bottom border-dark-800">
       <Banner/>
       </div>
-      <div className="text-dark-700 h-screen border z-0 py-16">
-    <div className="text-dark-700">
-      <Search changeQueryState={changeQueryState} />
+      <div className="text-dark-700 h-screen border  py-16">
+    <div className="text-dark-700" style={{minHeight: '100vh', backgroundAttachment: 'scroll'}}>
+      <Search changeQueryState={changeQueryState} setSongUri={setSongUri} />
       {showMusicList &&
-      <MusicList queryResults={queryResults} retrieveSongData={retrieveSongData}></MusicList>
+      <MusicList queryResults={queryResults} retrieveSongData={retrieveSongData} setAllSongUris={setAllSongUris} songIndex={songIndex} setSongIndex={setSongIndex} allSongUris={allSongUris}></MusicList>
       }
-      <MusicPlayer songUri={songUri} token={token}></MusicPlayer>
+      {showLyrics &&
+      <Lyrics
+      artist={songArtist}
+      title={songTitle}
+      url={url}
+      />
+    }
+      <div className="mt-4 z-4"  style={{zIndex: 10}}>
+      <MusicPlayer songUri={songUri} token={token} setSongIndex={setSongIndex} songIndex={songIndex} setQueryResults={setQueryResults} queryResults={queryResults} retrieveSongData={retrieveSongData}></MusicPlayer>
+      </div>
       {showPlaylists &&
+      <div className="z-0">
           <Playlists userInfo={userInfo} accessToken={accessToken} url={url}></Playlists>
+          </div>
       }
+
     </div>
   </div>
   </div>
