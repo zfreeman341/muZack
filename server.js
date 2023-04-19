@@ -240,7 +240,7 @@ app.get('/tracks', async (req, res) => {
 })
 
 app.post('/playlist', async (req, res) => {
-  try {
+  try{
     const {accessToken, userId} = req.body
     const spotifyApi = new SpotifyWebApi({
       clientId: process.env.REACT_APP_CLIENT_ID
@@ -249,10 +249,38 @@ app.post('/playlist', async (req, res) => {
 
     const getPlaylists = await spotifyApi.getUserPlaylists(userId)
     res.status(201).send(getPlaylists)
-  } catch (err) {
+  }
+  catch(err) {
     res.status(500).send(err)
+    console.error(err)
   }
 })
+
+app.post('/playplaylist', async (req, res) => {
+  try {
+    const {accessToken, playlistId} = req.body
+    const spotifyApi = new SpotifyWebApi({
+      clientId: process.env.REACT_APP_CLIENT_ID
+    })
+    spotifyApi.setAccessToken(accessToken)
+
+    const { body: {items} } = await spotifyApi.getPlaylistTracks(playlistId)
+    const tracks = items.map((track) => ({
+      uri: track.track.uri,
+      name: track.track.name,
+      artist: track.track.artists[0].name,
+      album: track.track.album.name,
+      image: track.track.href,
+      duration_ms: track.track.duration_ms
+    }))
+
+    res.status(200).send({tracks})
+  } catch (err) {
+    res.status(500).send(err)
+    console.error(err)
+  }
+})
+
 
 app.post('/profile-artists', async (req, res) => {
   try{

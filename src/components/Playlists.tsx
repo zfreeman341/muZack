@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import axios from 'axios';
 import Playlist from './Playlist';
 
@@ -10,10 +10,13 @@ type UserInfo = {
 interface Props{
   userInfo: UserInfo,
   accessToken: string,
-  url: string
+  url: string,
+  songUri: string[],
+  setSongUri: Function,
+  setShowPlaylists: Function
 }
 
-const Playlists: React.FC<Props>=({userInfo, accessToken, url}) => {
+const Playlists: React.FC<Props>=({userInfo, accessToken, url, songUri, setSongUri, setShowPlaylists}) => {
   const [userPlaylists, setUserPlaylists] = React.useState<any>([]);
 
   React.useEffect(() => {
@@ -32,6 +35,10 @@ const Playlists: React.FC<Props>=({userInfo, accessToken, url}) => {
   }, [userInfo, accessToken, url]);
 
 
+  useEffect(() => {
+    console.log(userPlaylists)
+  }, [userPlaylists])
+
 
   return(
     <div className="container mx-auto px-4 py-6 z-0">
@@ -44,6 +51,11 @@ const Playlists: React.FC<Props>=({userInfo, accessToken, url}) => {
             name={playlist.name}
             image={playlist.images}
             tracks={playlist.tracks}
+            songUri={songUri}
+            setSongUri={setSongUri}
+            accessToken={accessToken}
+            playlistId={playlist.id}
+            setShowPlaylists={setShowPlaylists}
           />
         ))
       ) : (

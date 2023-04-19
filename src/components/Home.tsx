@@ -55,9 +55,9 @@ const Home: React.FC<HomePageProps> = ({authorizationCode}) => {
 
   // which components to be rendered
   const [showPlaylists, setShowPlaylists] = useState<boolean>(true)
-  const [showMusicList, setShowMusicList] = useState<boolean>(true)
-  const [showLyrics, setShowLyrics] = useState<boolean>(true)
-  const [showProfile, setShowProfile] = useState<boolean>(true)
+  const [showMusicList, setShowMusicList] = useState<boolean>(false)
+  const [showLyrics, setShowLyrics] = useState<boolean>(false)
+  const [showProfile, setShowProfile] = useState<boolean>(false)
 
   const useAuth = (authorizationCode: string) => {
 
@@ -175,19 +175,19 @@ const Home: React.FC<HomePageProps> = ({authorizationCode}) => {
 
 
   return (
-    <div className="relative overflow-auto" style={{background: `url(${logo}) repeat center`, backgroundSize: 'cover'}}>
+    <div className="relative overflow-auto">
       <div className="grid grid-cols-12 h-full">
-        <div className="col-span-1 h-full bg-gray-500">
+        <div className="col-span-1 min-h-screen bg-gray-800" style={{opacity: .8}}>
           <Sidebar renderSidebarItem={renderSidebarItem} />
         </div>
-        <div className="col-span-11">
+        <div className="col-span-11" style={{background: `url(${logo}) repeat center`, backgroundSize: 'cover'}}>
           <div className="border border-bottom border-dark-800">
             <Banner/>
           </div>
           <div className="text-dark-700 h-screen border py-16">
             <div className="text-dark-700" style={{minHeight: '100vh', backgroundAttachment: 'scroll'}}>
               <Search changeQueryState={changeQueryState} setSongUri={setSongUri} />
-              <Profile userInfo={userInfo}></Profile>
+              <Profile userInfo={userInfo} renderProfilePage={renderProfilePage}></Profile>
               {showMusicList &&
                 <MusicList queryResults={queryResults} retrieveSongData={retrieveSongData} setAllSongUris={setAllSongUris} songIndex={songIndex} setSongIndex={setSongIndex} allSongUris={allSongUris}></MusicList>
               }
@@ -201,7 +201,7 @@ const Home: React.FC<HomePageProps> = ({authorizationCode}) => {
               <div className="relative">
                 {showPlaylists &&
                   <div className="z-40">
-                    <Playlists userInfo={userInfo} accessToken={token} url={url}></Playlists>
+                    <Playlists userInfo={userInfo} accessToken={token} url={url} songUri={songUri} setSongUri={setSongUri}setShowPlaylists={setShowPlaylists}></Playlists>
                   </div>
                 }
                 <div className="mt-16 z-100">

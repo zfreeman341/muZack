@@ -9,9 +9,10 @@ type UserInfo = {
 
 interface Props {
   userInfo: UserInfo;
+  renderProfilePage: () => void;
 }
 
-const Profile: React.FC<Props> = ({ userInfo }) => {
+const Profile: React.FC<Props> = ({ userInfo, renderProfilePage }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleOpen = () => {
@@ -20,11 +21,6 @@ const Profile: React.FC<Props> = ({ userInfo }) => {
 
   const handleLogout = () => {
     window.location.href = '/';
-  };
-
-  const renderProfilePage = () => {
-    console.log('clicked!');
-    // to be replaced
   };
 
   return (

@@ -1,11 +1,11 @@
 import React from 'react'
-import {FaMusic, FaList, FaMicrophone} from 'react-icons/fa'
+import { FaMusic, FaList, FaMicrophone } from 'react-icons/fa'
 
 interface Props {
   renderSidebarItem: Function
 }
 
-const Sidebar: React.FC<Props> = ({renderSidebarItem}) => {
+const Sidebar: React.FC<Props> = ({ renderSidebarItem }) => {
   const SidebarItems = ['Songs', 'Lyrics', 'Playlists']
 
   const renderSidebarIcons = (item: string) => {
@@ -13,16 +13,18 @@ const Sidebar: React.FC<Props> = ({renderSidebarItem}) => {
     if (item === 'Lyrics') return <FaMicrophone />
     if (item === 'Playlists') return <FaList />
   }
-  return(
-    <div className="w-1/12 h-screen flex flex-col justify-center items-center">
+
+  return (
+    <div className="w-24 h-screen flex flex-col justify-center bg-gray-800 text-dark-800">
       {SidebarItems.map((item: string, index: number) => (
-        <div
-        key={index}
-        className="font-sans text-white mt-6 text-center cursor-pointer hover:text-dark-800"
-        onClick={() => renderSidebarItem(item)}
-        >
-        {renderSidebarIcons(item)}
-        <p className="mt-2">{item}</p>
+        <div key={index} className="sidebar-item my-2 flex items-center pl-2">
+          <div
+            className="font-sans text-left cursor-pointer flex-1 ml-8"
+            onClick={() => renderSidebarItem(item)}
+          >
+            {renderSidebarIcons(item)}
+            <p className="mt-1">{item}</p>
+          </div>
         </div>
       ))}
     </div>

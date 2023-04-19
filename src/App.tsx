@@ -21,18 +21,6 @@ function App() {
     }
   }, [])
 
-
-  // // useEffect(() => {
-  //   setAuthorizationCode(localStorage.getItem("authorizationCode"))
-  // }, [handleAuthorizationCode])
-
-  // useEffect(() => {
-  //   const search = window.location.search;
-  //   const params = new URLSearchParams(search)
-  //   const code = params.get('code')
-  //   handleAuthorizationCode(code || "")
-  // }, [authorizationCode])
-
   return (
     // <div className="w-full h-full z-0">
     <div className="bg-dark-500 !important">
