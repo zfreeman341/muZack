@@ -19,21 +19,20 @@ const Lyrics: React.FC<Props> = ({artist, title, url}) => {
 
   return (
       <div className="p-4 rounded-lg text-center">
-        <div className="bg-dark-100text-white p-4 rounded-lg mb-4">
-          <h1 className="text-2xl font-bold mb-2">{title}</h1>
-          <h2 className="text-lg font-semibold">{artist}</h2>
-        </div>
         <pre
         className="whitespace-pre-wrap inline-block"
         style={{
           textShadow: '1px 1px #9B8EPD',
-          color: '#27BD5C',
+          color: '#D3D3D3',
           backgroundColor: '#1C1E1C',
           borderRadius: '10px',
           padding: '10px',
-          opacity: 0.8
-        }}s
-        >{lyrics}</pre>
+          background: 'radial-gradient(ellipse at center, rgba(28,30,28,0.7) 0%,rgba(28,30,28,1) 100%)',
+        }}
+        >
+          <h1 className="text-2xl font-bold mb-2">{title}</h1>
+          <h2 className="txt-lg font-semibold">{artist}</h2>
+          {lyrics}</pre>
       </div>
   )
 }

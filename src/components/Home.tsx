@@ -7,6 +7,9 @@ import Search from './Search'
 import MusicList from './MusicList'
 import MusicPlayer from './MusicPlayer'
 import Lyrics from './Lyrics'
+import Profile from './Profile'
+import Profilepage from './Profilepage'
+import Sidebar from './Sidebar'
 
 const url = 'http://localhost:4000'
 
@@ -54,6 +57,7 @@ const Home: React.FC<HomePageProps> = ({authorizationCode}) => {
   const [showPlaylists, setShowPlaylists] = useState<boolean>(true)
   const [showMusicList, setShowMusicList] = useState<boolean>(true)
   const [showLyrics, setShowLyrics] = useState<boolean>(true)
+  const [showProfile, setShowProfile] = useState<boolean>(true)
 
   const useAuth = (authorizationCode: string) => {
 
@@ -143,40 +147,86 @@ const Home: React.FC<HomePageProps> = ({authorizationCode}) => {
     setSongIndex(index)
   }
 
-  useEffect(() => {
-    console.log(queryResults)
-  }, [queryResults])
+  const renderSidebarItem = (item: string) => {
+    if (item === 'Songs') {
+      setShowMusicList(true)
+      setShowProfile(false)
+      setShowLyrics(false)
+      setShowPlaylists(false)
+    } else if (item === 'Lyrics') {
+      setShowMusicList(false)
+      setShowProfile(false)
+      setShowLyrics(true)
+      setShowPlaylists(false);
+    } else {
+      setShowMusicList(false)
+      setShowProfile(false)
+      setShowLyrics(false)
+      setShowPlaylists(true)
+    }
+  }
+
+  const renderProfilePage =() => {
+    setShowProfile(true)
+    setShowMusicList(false)
+    setShowLyrics(false)
+    setShowPlaylists(false)
+  }
+
 
   return (
-<div className="relative z-50 overflow-auto" style={{background: `url(${logo}) repeat center`, backgroundSize: 'cover'}}>      <div  className="border border-bottom border-dark-800">
-      <Banner/>
-      </div>
-      <div className="text-dark-700 h-screen border  py-16">
-    <div className="text-dark-700" style={{minHeight: '100vh', backgroundAttachment: 'scroll'}}>
-      <Search changeQueryState={changeQueryState} setSongUri={setSongUri} />
-      {showMusicList &&
-      <MusicList queryResults={queryResults} retrieveSongData={retrieveSongData} setAllSongUris={setAllSongUris} songIndex={songIndex} setSongIndex={setSongIndex} allSongUris={allSongUris}></MusicList>
-      }
-      {showLyrics &&
-      <Lyrics
-      artist={songArtist}
-      title={songTitle}
-      url={url}
-      />
-    }
-      <div className="mt-4 z-4"  style={{zIndex: 10}}>
-      <MusicPlayer songUri={songUri} token={token} setSongIndex={setSongIndex} songIndex={songIndex} setQueryResults={setQueryResults} queryResults={queryResults} retrieveSongData={retrieveSongData}></MusicPlayer>
-      </div>
-      {showPlaylists &&
-      <div className="z-0">
-          <Playlists userInfo={userInfo} accessToken={accessToken} url={url}></Playlists>
+    <div className="relative overflow-auto" style={{background: `url(${logo}) repeat center`, backgroundSize: 'cover'}}>
+      <div className="grid grid-cols-12 h-full">
+        <div className="col-span-1 h-full bg-gray-500">
+          <Sidebar renderSidebarItem={renderSidebarItem} />
+        </div>
+        <div className="col-span-11">
+          <div className="border border-bottom border-dark-800">
+            <Banner/>
           </div>
-      }
-
+          <div className="text-dark-700 h-screen border py-16">
+            <div className="text-dark-700" style={{minHeight: '100vh', backgroundAttachment: 'scroll'}}>
+              <Search changeQueryState={changeQueryState} setSongUri={setSongUri} />
+              <Profile userInfo={userInfo}></Profile>
+              {showMusicList &&
+                <MusicList queryResults={queryResults} retrieveSongData={retrieveSongData} setAllSongUris={setAllSongUris} songIndex={songIndex} setSongIndex={setSongIndex} allSongUris={allSongUris}></MusicList>
+              }
+              {showLyrics &&
+                <Lyrics
+                artist={songArtist}
+                title={songTitle}
+                url={url}
+                />
+              }
+              <div className="relative">
+                {showPlaylists &&
+                  <div className="z-40">
+                    <Playlists userInfo={userInfo} accessToken={token} url={url}></Playlists>
+                  </div>
+                }
+                <div className="mt-16 z-100">
+                  <div>
+                    {showProfile &&
+                    <Profilepage
+                    userInfo={userInfo}
+                    accessToken={accessToken}
+                    url={url}
+                    />
+                    }
+                  </div>
+                  <div className="mt-8">
+                  <MusicPlayer songUri={songUri} token={token} setSongIndex={setSongIndex} songIndex={songIndex} setQueryResults={setQueryResults} queryResults={queryResults} retrieveSongData={retrieveSongData}></MusicPlayer>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-  </div>
-  )
+  );
+
+
 }
 
 export default Home

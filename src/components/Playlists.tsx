@@ -34,7 +34,7 @@ const Playlists: React.FC<Props>=({userInfo, accessToken, url}) => {
 
 
   return(
-    <div className="container mx-auto px-4 py-6 z-4">
+    <div className="container mx-auto px-4 py-6 z-0">
       <h1 className="text-3xl font-bold mb-6">Your Playlists</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
       {userPlaylists.length > 0 ? (

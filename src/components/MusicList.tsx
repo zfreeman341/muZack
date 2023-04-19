@@ -83,10 +83,6 @@ const MusicList: React.FC<Props> = ({queryResults, retrieveSongData, setAllSongU
     }
   }
 
-  React.useEffect(() => {
-    console.log(queryResults[songIndex])
-  }, [queryResults, songIndex])
-
   return (
     <div className="music-container">
       {queryResults.length !== 0 && (

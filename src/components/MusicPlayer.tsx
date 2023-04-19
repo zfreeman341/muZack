@@ -19,26 +19,6 @@ const MusicPlayer: React.FC<Props> = ({token, songUri, setSongIndex, songIndex, 
     setPlay(true)
   }, [songUri])
 
-  const handleNextTrack = (state?: any) => {
-    console.log(state)
-      // let nextIndex: any = songIndex + 1
-      // if (nextIndex >= queryResults.length) {
-      //   nextIndex = 0
-      // }
-      // setSongIndex(nextIndex)
-      // const nextResult: any = queryResults[nextIndex]
-      // retrieveSongData(
-      //   queryResults[nextIndex].uri,
-      //   nextResult!.name!,
-      //   nextResult!.artists![0]!.name!,
-      //   nextIndex
-      // )
-      // }
-  }
-
-  useEffect(() => {
-
-  })
 
   return(
     <div className="bg-dark-500 !important">
@@ -55,9 +35,6 @@ const MusicPlayer: React.FC<Props> = ({token, songUri, setSongIndex, songIndex, 
           persistDeviceSelection
           styles={{
             sliderColor: '#cbd5e0'
-          }}
-          callback={(state: any) => {
-            console.log(state)
           }}
         />
       </div>

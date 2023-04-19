@@ -254,7 +254,7 @@ app.post('/playlist', async (req, res) => {
   }
 })
 
-app.post('/profile-arists', async (req, res) => {
+app.post('/profile-artists', async (req, res) => {
   try{
     const spotifyApi = new SpotifyWebApi({
       clientId: process.env.REACT_APP_CLIENT_ID
@@ -265,6 +265,7 @@ app.post('/profile-arists', async (req, res) => {
     res.status(201).send(getArtists)
   } catch (err) {
     res.status(500).send(err)
+    console.error(err)
   }
 })
 
@@ -274,8 +275,6 @@ app.post('/play-next-track', async (req, res) => {
       clientId: process.env.REACT_APP_CLIENT_ID
     });
     spotifyApi.setAccessToken(req.body.accessToken);
-
-    const playbackState = await spotifyApi.getMyCurrentPlaybackState();
     // if (!playbackState || !playbackState.is_playing) {
     //   return res.sendStatus(404);
     // }
