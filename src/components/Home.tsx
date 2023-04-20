@@ -180,16 +180,18 @@ const Home: React.FC<HomePageProps> = ({authorizationCode}) => {
         <div className="col-span-1 min-h-screen bg-gray-800" style={{opacity: .8}}>
           <Sidebar renderSidebarItem={renderSidebarItem} />
         </div>
-        <div className="col-span-11" style={{background: `url(${logo}) repeat center`, backgroundSize: 'cover'}}>
+        <div className="col-span-11 relative overflow-auto" style={{background: `url(${logo}) repeat center`, backgroundSize: 'cover'}}>
           <div className="border border-bottom border-dark-800">
             <Banner/>
           </div>
           <div className="text-dark-700 h-screen border py-16">
             <div className="text-dark-700" style={{minHeight: '100vh', backgroundAttachment: 'scroll'}}>
-              <Search changeQueryState={changeQueryState} setSongUri={setSongUri} />
               <Profile userInfo={userInfo} renderProfilePage={renderProfilePage}></Profile>
               {showMusicList &&
+              <div>
+                 <Search changeQueryState={changeQueryState} setSongUri={setSongUri} />
                 <MusicList queryResults={queryResults} retrieveSongData={retrieveSongData} setAllSongUris={setAllSongUris} songIndex={songIndex} setSongIndex={setSongIndex} allSongUris={allSongUris}></MusicList>
+                </div>
               }
               {showLyrics &&
                 <Lyrics
@@ -215,7 +217,7 @@ const Home: React.FC<HomePageProps> = ({authorizationCode}) => {
                     }
                   </div>
                   <div className="mt-8">
-                  <MusicPlayer songUri={songUri} token={token} setSongIndex={setSongIndex} songIndex={songIndex} setQueryResults={setQueryResults} queryResults={queryResults} retrieveSongData={retrieveSongData}></MusicPlayer>
+                  <MusicPlayer songUri={songUri} token={token}></MusicPlayer>
                   </div>
                 </div>
               </div>

@@ -18,7 +18,7 @@ const Lyrics: React.FC<Props> = ({artist, title, url}) => {
   }, [artist, title, url])
 
   return (
-      <div className="p-4 rounded-lg text-center">
+      <div className="p-4 rounded-lg text-center overflow-y-scroll overflow-contain sticky top-16 h-[calc(100vh-15rem)]">
         <pre
         className="whitespace-pre-wrap inline-block"
         style={{

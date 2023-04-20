@@ -5,14 +5,10 @@ import SpotifyPlayer from 'react-spotify-web-playback';
 interface Props{
   token: string;
   songUri: string | string[];
-  setSongIndex: Function;
-  songIndex: number;
-  setQueryResults: Function,
-  queryResults: any,
-  retrieveSongData: Function
+
 }
 
-const MusicPlayer: React.FC<Props> = ({token, songUri, setSongIndex, songIndex, setQueryResults, queryResults, retrieveSongData}) => {
+const MusicPlayer: React.FC<Props> = ({token, songUri}) => {
   const [play, setPlay] = useState<boolean>(false)
 
   useEffect(() => {
