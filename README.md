@@ -1,50 +1,51 @@
-# Getting Started with Create React App
+# MuZack
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+![MuZack Placeholder](./public/logo.png)
 
-## Available Scripts
+MuZack is a feature rich, responsive web application built using Typescript and React. I started this project as a fun way to expand my TypeScript knowledge, and to create a personalized, one-stop music app. This app seamlessly integrates with the Spotify API to provide an engaging music discovery experience. This app will eventually feature integration with the Songkick API, to display and play concert setlists for your favorite artists.
 
-In the project directory, you can run:
+## Features
+- Browse popular playlists and discover new music using the Spotify API.
+- Search for your favroite songs and artists.
+- Create and display personalized playlists.
+- Access and manage your Spotify playlists and library.
+- [TO COME] search popular artists and playlists using the Spotify API.
+- [TO COME] search concert setlists usings the Songkick API and play those setlists through Spotify.
 
-### `npm start`
+## Getting Started
 
-Runs the app in the development mode.\
-Open [http://localhost:4000](http://localhost:4000) to view it in the browser.
+These instructions will help you get a copy of the project running on your local machine.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+### Prerequisites
 
-### `npm test`
+To run this project, you will need the following installed on your local machine:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Node.js (v14.x or higher)
+- npm (v6.x or higher)
 
-### `npm run build`
+### Installation
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+1. Clone the repository:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+``` git clone https://github.com/zfreeman341/muZack.git```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+2. Install the dependencies:
+``` npm install ```
 
-### `npm run eject`
+3. Create a `.env` file in the project root with the following envrionmental variables:
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+``` PORT=4000
+REACT_APP_CLIENT_ID= XXX [from Spotify Developers Tab]
+REACT_APP_CLIENT_SECRET=XXX [from Spotfiy Developers Tab]
+REACT_APP_REDIRECT_URI=http://localhost:4000
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Replace the placeholders wtih your Spotify API credentials.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+4. Create a production-ready build of the application as needed:
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+``` npm run build ```
 
-## Learn More
+5. Run the server on your specified port:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-    // "@material-ui/core": "^4.12.4",
-    // "@material-ui/icons": "^4.11.3",
-    // "@mui/material": "^5.12.0",
+``` npm run server-dev ```
